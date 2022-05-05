@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Web Boutique{% endblock %}
+
+{% block content %}
+    <h1>Mon compte</h1>
+    {% if app.user %}
+        {{ app.user.firstname }}
+    {% endif %}<br>
+    <a href="{{ path('account_password') }}">Modifier mon mot de passe</a>
+{% endblock %}
