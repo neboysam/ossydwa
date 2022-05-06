@@ -1,7 +1,25 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}WebBoutique - Gestion des adresses{% endblock %}
+{% block title %}WebBoutique - Gestion des adresses
+{% endblock %}
 
 {% block content %}
-
+	<a href="{{ path('add_address') }}" class="btn btn-primary float-right">Ajouter une adresse</a>
+    {% if app.user.addresses|length == 0 %}
+        <p>Vous n'avez pas les adresses encore. Veuillez creer une en cliqant ici <a href="{{ path('add_address') }}">Ajouter une adresse</a>
+    {% else %}
+        <div class ="row">
+            {% for address in app.user.addresses %}
+                <div class="col-md-4">
+                    <div class="card" style="width: 18rem;">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ address.name }}</h5>
+                            <p class="card-text">{{ address.address }}</p>
+                            <a href="{{ path('edit_address', {'id': address.id}) }}">Modifier</a> | <a href="{{ path('delete_address', {'id': address.id}) }}">Supprimer</a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
 {% endblock %}

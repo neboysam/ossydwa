@@ -13,6 +13,6 @@ class AccountController extends AbstractController
      */
     public function index(): Response
     {
-        return $this->render('account/mon-compte.html.twig');
+        return $this->render('account/my-account.html.twig');
     }
 }
