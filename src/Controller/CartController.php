@@ -61,4 +61,14 @@ class CartController extends AbstractController
         $cart->delete($id);
         return $this->redirectToRoute('cart');
     }
+
+    /**
+     * @Route("/cart/subtract/{id}", name="subtract_from_cart")
+     */
+    public function subtractFromCart(Cart $cart, $id): Response
+    {
+        //dd($id);
+        $cart->subtract($id);
+        return $this->redirectToRoute('cart');
+    }
 }

@@ -79,4 +79,15 @@ class Cart
         unset($cart[$id]);
         $this->session->set('cart', $cart);
     }
+
+    public function subtract($id)
+    {
+        $cart = $this->session->get('cart', []);
+        if ($cart[$id] > 1) {
+            $cart[$id]--;
+        } else {
+            unset($cart[$id]);
+        }
+        $this->session->set('cart', $cart);
+    }
 }
