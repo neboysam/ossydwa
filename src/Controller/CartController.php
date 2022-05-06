@@ -35,7 +35,7 @@ class CartController extends AbstractController
     /**
      * @Route("/cart/add/{id}", name="add_to_cart")
      */
-    public function add(Cart $cart, $id): Response
+    public function addToCart(Cart $cart, $id): Response
     {
         //dd($id);
         $cart->add($id);
@@ -43,12 +43,22 @@ class CartController extends AbstractController
     }
 
     /**
-     * @Route("/cart/remove", name="remove_from_cart")
+     * @Route("/cart/remove", name="remove_cart")
      */
-    public function remove(Cart $cart): Response
+    public function removeCart(Cart $cart): Response
     {
         //dd($id);
         $cart->remove();
         return $this->redirectToRoute('products');
+    }
+
+    /**
+     * @Route("/cart/delete/{id}", name="delete_from_cart")
+     */
+    public function deleteFromCart(Cart $cart, $id): Response
+    {
+        //dd($id);
+        $cart->delete($id);
+        return $this->redirectToRoute('cart');
     }
 }
