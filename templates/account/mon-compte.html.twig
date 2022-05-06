@@ -5,7 +5,10 @@
 {% block content %}
     <h1>Mon compte</h1>
     {% if app.user %}
-        {{ app.user.firstname }}
-    {% endif %}<br>
-    <a href="{{ path('account_password') }}">Modifier mon mot de passe</a>
+        Bienvenue {{ app.user.firstname }} dans votre compte.<br>
+        Dans cet espace vous pouvez gérer toutes vos informations personnelles.
+        <hr>
+    {% endif %}
+    <a href="{{ path('account_password') }}">Modifier mon mot de passe</a><br>
+    <a href="{{ path('account_addresses') }}">Gérer mes adresses</a>
 {% endblock %}
