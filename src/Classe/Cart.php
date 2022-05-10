@@ -2,6 +2,7 @@
 
 namespace App\Classe;
 
+use App\Repository\ProductRepository;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 class Cart
@@ -89,5 +90,20 @@ class Cart
             unset($cart[$id]);
         }
         $this->session->set('cart', $cart);
+    }
+
+    public function completeCart(ProductRepository $repository)
+    {
+        $completeCart = [];
+        if ($this->get()) {
+            foreach ($this->get() as $id => $quantity) {
+                $completeCart[] = [
+                    'quantity' => $quantity,
+                    /* 'products' => $this->entityManager->getRepository(Product::class)->findById($id) */
+                    'product' => $repository->findOneById($id)
+                ];
+            }
+        }
+        return $completeCart;
     }
 }
