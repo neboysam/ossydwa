@@ -21,5 +21,11 @@ body {
 
 .form-check {
     background-color: rgb(224, 239, 247);
-    padding: 20px;
+    padding: 20px 65px;
+    margin-top: 5px;
+}
+
+.order-summary {
+    background-color: rgb(224, 239, 247);
+    padding: 20px 35px;
 }

@@ -9,29 +9,32 @@
     <div class="row">
         <div class="col-md-6">
             {% set formHtml %}
-                {{ form(form) }}
+                {{ form_start(form, {'action': path('order_recap')}) }}
+                    {{ form_widget(form)}}
+                {{ form_end(form) }}
             {% endset %}
 
-            {{ formHtml|replace({'[br]' : '<br>'})|raw }}
-            <a href="{{ path('cart') }}" class="btn btn-success btn-block">Valider ma commande</a>         
+            {{ formHtml|replace({'[br]' : '<br>'})|raw }}         
         </div>
         <div class="col-md-6">
             <p><b>Recap de ma commande</b></p>
             {# {{ dump(cart) }} #}
-            {% for product in cart %}
-                <div class="row">
-                    <div class="col-md-2">
-                        <img src="{{ asset('uploads/' ~ product.product.illustration) }}" alt="{{ product.product.name }}" height="75px">
-                    </div>
-                    <div class="col-md-7">
-                        {{ product.product.name }}<br>
-                        <small>{{ product.product.subtitle }}</small>
-                    </div>
-                    <div class="col-md-3">
-                        x {{ product.quantity }}
-                    </div>
-                </div> 
-            {% endfor %}
+            <div class="order-summary">
+                {% for key, product in cart %}
+                    <div class="row {% if key > 0 %}mt-2{% endif %}">
+                        <div class="col-md-2">
+                            <img src="{{ asset('uploads/' ~ product.product.illustration) }}" alt="{{ product.product.name }}" height="75px">
+                        </div>
+                        <div class="col-md-7 my-auto">
+                            {{ product.product.name }}<br>
+                            <small>{{ product.product.subtitle }}</small>
+                        </div>
+                        <div class="col-md-3 my-auto">
+                            x {{ product.quantity }}
+                        </div>
+                    </div> 
+                {% endfor %}
+            </div>
         </div>
     </div>
         
