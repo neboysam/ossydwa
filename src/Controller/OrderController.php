@@ -6,6 +6,7 @@ use App\Classe\Cart;
 use App\Entity\Order;
 use DateTimeImmutable;
 use App\Form\OrderType;
+use App\Entity\OrderDetails;
 use App\Repository\ProductRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -45,6 +46,8 @@ class OrderController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $carriers = $form->get('carriers')->getData();
+            $delivery = $form->get('carriers')->getData();
             //dd($form->get('addresses')->getData());
             /* dd($form->getData()); */
             /* dd($form->get('carriers')->getData()); */
@@ -56,12 +59,34 @@ class OrderController extends AbstractController
             $order->setCarrierName($form->get('carriers')->getData()->getName());
             $order->setCarrierPrice($form->get('carriers')->getData()->getPrice());
             $order->setDelivery($form->get('addresses')->getData()->getName());
-            dd($order);
+            $order->setIsPaid(false);
+            $manager->persist($order);
+            $manager->flush();
             
+            $orderDetails = new OrderDetails();
+
+            $cartData = $cart->completeCart($repository);
+
+            foreach($cartData as $key1 => $data) {
+                /* dd($data['quantity']); */
+                /* dd($data['product']->getName()); */
+                /* dd($data['product']->getPrice()); */
+                /* foreach($elements as $key2 => $element) {
+                    dd($element);
+                } */
+                $orderDetails->setMyOrder($order);
+                $orderDetails->setProduct($data['product']->getName());
+                $orderDetails->setQuantity($data['quantity']);
+                $orderDetails->setPrice($data['product']->getPrice());
+                $orderDetails->setTotal($data['quantity'] * $data['product']->getPrice());
+                $manager->persist($orderDetails);
+                $manager->flush();
+            }
         }
 
         return $this->render('order/order_summary.html.twig', [
-            'cart' => $cart->completeCart($repository)
+            'cart' => $cart->completeCart($repository),
+            'carrierPrice' => $form->get('carriers')->getData()->getPrice()
         ]);
     }
 }

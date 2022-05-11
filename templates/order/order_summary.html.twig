@@ -3,21 +3,18 @@
 {% block title %}Recapitulatif de ma commande{% endblock %}
 
 {% block content %}
-    <h1>Je passe ma commande</h1>
-    <p>Choisissez vos preferences avant de passer votre commande sur La WebBoutique.</p>
+    <h1>Mon récapitulatif</h1>
+    <p>Verifiez votre informations avant de payer votre commande.</p>
     <hr>
     <div class="row">
         <div class="col-md-6">
-            {% set formHtml %}
-                {{ form(form) }}
-            {% endset %}
-
-            {{ formHtml|replace({'[br]' : '<br>'})|raw }}
-            <a href="{{ path('order_recap') }}" class="btn btn-success btn-block">Valider ma commande</a>         
+            
+                     
         </div>
         <div class="col-md-6">
-            <p><b>Recap de ma commande</b></p>
+            <p><b>Ma commande</b></p>
             {# {{ dump(cart) }} #}
+            {% set total = null %}
             {% for product in cart %}
                 <div class="row">
                     <div class="col-md-2">
@@ -25,13 +22,21 @@
                     </div>
                     <div class="col-md-7">
                         {{ product.product.name }}<br>
-                        <small>{{ product.product.subtitle }}</small>
-                    </div>
-                    <div class="col-md-3">
+                        <small>{{ product.product.subtitle }}</small><br>
                         x {{ product.quantity }}
                     </div>
-                </div> 
+                    <div class="col-md-3">
+                        {{ ((product.product.price)/100)|number_format(2, ',', '.') }} €
+                    </div>
+                </div>
+                <hr>
+                <div>
+                    <p><b>Sous-Total :</b> {{ (((product.product.price)*(product.quantity))/100)|number_format(2, ',', '.') }} €</p>
+                    <p><b>Livraison :</b> {{ carrierPrice }}</p>
+                </div>
+                {% set total = total + (product.product.price * product.quantity) %}
             {% endfor %}
+            <a href="{{ path('order_recap') }}" class="btn btn-success btn-block">Payer {{ ((total / 100) + carrierPrice)|number_format(2, ',', '.') }} €</a>
         </div>
     </div>
         
