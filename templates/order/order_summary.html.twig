@@ -8,8 +8,17 @@
     <hr>
     <div class="row">
         <div class="col-md-6">
-            
-                     
+            <p><b>Mon adresse de livraison</b></p>
+            {{ delivery.name }}<br>
+            {{ delivery.phone }}<br>
+            {{ delivery.address }}<br>
+            {{ delivery.zip }} - {{ delivery.city }}<br>
+            {{ delivery.country }}
+            <hr>
+            <p><b>Mon transporteur</b></p>
+            {{ carriers.name }}<br>
+            {{ carriers.description }}<br>
+            {{ carriers.price }}
         </div>
         <div class="col-md-6">
             <p><b>Ma commande</b></p>

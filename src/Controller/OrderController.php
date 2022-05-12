@@ -47,7 +47,7 @@ class OrderController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $carriers = $form->get('carriers')->getData();
-            $delivery = $form->get('carriers')->getData();
+            $delivery = $form->get('addresses')->getData();
             //dd($form->get('addresses')->getData());
             /* dd($form->getData()); */
             /* dd($form->get('carriers')->getData()); */
@@ -56,9 +56,9 @@ class OrderController extends AbstractController
             $order = new Order();
             $order->setUser($this->getUser());
             $order->setCreatedAt($date);
-            $order->setCarrierName($form->get('carriers')->getData()->getName());
-            $order->setCarrierPrice($form->get('carriers')->getData()->getPrice());
-            $order->setDelivery($form->get('addresses')->getData()->getName());
+            $order->setCarrierName($carriers->getName());
+            $order->setCarrierPrice($carriers->getPrice());
+            $order->setDelivery($delivery->getName());
             $order->setIsPaid(false);
             $manager->persist($order);
             $manager->flush();
@@ -86,7 +86,9 @@ class OrderController extends AbstractController
 
         return $this->render('order/order_summary.html.twig', [
             'cart' => $cart->completeCart($repository),
-            'carrierPrice' => $form->get('carriers')->getData()->getPrice()
+            'carrierPrice' => $carriers->getPrice(),
+            'carriers' => $carriers,
+            'delivery' => $delivery
         ]);
     }
 }
