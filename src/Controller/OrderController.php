@@ -45,9 +45,10 @@ class OrderController extends AbstractController
         ]);
         $form->handleRequest($request);
 
+        $carriers = $form->get('carriers')->getData();
+        $delivery = $form->get('addresses')->getData();
+
         if ($form->isSubmitted() && $form->isValid()) {
-            $carriers = $form->get('carriers')->getData();
-            $delivery = $form->get('addresses')->getData();
             //dd($form->get('addresses')->getData());
             /* dd($form->getData()); */
             /* dd($form->get('carriers')->getData()); */
@@ -61,27 +62,34 @@ class OrderController extends AbstractController
             $order->setDelivery($delivery->getName());
             $order->setIsPaid(false);
             $manager->persist($order);
-            $manager->flush();
-            
-            $orderDetails = new OrderDetails();
 
             $cartData = $cart->completeCart($repository);
 
-            foreach($cartData as $key1 => $data) {
-                /* dd($data['quantity']); */
-                /* dd($data['product']->getName()); */
-                /* dd($data['product']->getPrice()); */
+            foreach($cartData as $key1 => $product) {
+                $orderDetails = new OrderDetails();
+                /* dd($product['quantity']); */
+                /* dd($product['product']->getName()); */
+                /* dd($product['product']->getPrice()); */
                 /* foreach($elements as $key2 => $element) {
                     dd($element);
                 } */
                 $orderDetails->setMyOrder($order);
-                $orderDetails->setProduct($data['product']->getName());
-                $orderDetails->setQuantity($data['quantity']);
-                $orderDetails->setPrice($data['product']->getPrice());
-                $orderDetails->setTotal($data['quantity'] * $data['product']->getPrice());
+                $orderDetails->setProduct($product['product']->getName());
+                $orderDetails->setQuantity($product['quantity']);
+                $orderDetails->setPrice($product['product']->getPrice());
+                $orderDetails->setTotal($product['quantity'] * $product['product']->getPrice());
                 $manager->persist($orderDetails);
-                $manager->flush();
+
+                /* $manager->flush(); */
             }
+
+        //Stripe integration
+        //has been put into StripeController.php
+        //End of Stripe integration
+
+        /* dump($checkout_session->id);
+        dd($checkout_session); */
+
         }
 
         return $this->render('order/order_summary.html.twig', [

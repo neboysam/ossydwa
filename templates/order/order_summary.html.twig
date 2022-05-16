@@ -1,6 +1,10 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Recapitulatif de ma commande{% endblock %}
+{% block javascript %}
+    <script src="https://js.stripe.com/v3/"></script>
+{% endblock %}
+
+{% block title %}Paiement de ma commande - Web Boutique{% endblock %}
 
 {% block content %}
     <h1>Mon récapitulatif</h1>
@@ -45,8 +49,9 @@
                 </div>
                 {% set total = total + (product.product.price * product.quantity) %}
             {% endfor %}
-            <a href="{{ path('order_recap') }}" class="btn btn-success btn-block">Payer {{ ((total / 100) + carrierPrice)|number_format(2, ',', '.') }} €</a>
+            <form method="POST">
+                <a href="{{path('stripe_create_session')}}" class="btn btn-success btn-block">Payer {{ ((total / 100) + carrierPrice)|number_format(2, ',', '.') }} €</a>
+            </form>
         </div>
     </div>
-        
 {% endblock %}
