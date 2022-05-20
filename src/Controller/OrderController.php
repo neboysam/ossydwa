@@ -54,6 +54,7 @@ class OrderController extends AbstractController
             /* dd($form->get('carriers')->getData()); */
             /* dd($form->get('addresses')->getData()); */
             $date = new \DateTimeImmutable();
+            $reference = $date->format('dMY').'-'.uniqid();
             $order = new Order();
             $order->setUser($this->getUser());
             $order->setCreatedAt($date);
@@ -61,6 +62,7 @@ class OrderController extends AbstractController
             $order->setCarrierPrice($carriers->getPrice());
             $order->setDelivery($delivery->getName());
             $order->setIsPaid(false);
+            $order->setReference($reference);
             $manager->persist($order);
 
             $cartData = $cart->completeCart($repository);
@@ -80,7 +82,7 @@ class OrderController extends AbstractController
                 $orderDetails->setTotal($product['quantity'] * $product['product']->getPrice());
                 $manager->persist($orderDetails);
 
-                /* $manager->flush(); */
+                $manager->flush();
             }
 
         //Stripe integration
@@ -96,7 +98,8 @@ class OrderController extends AbstractController
             'cart' => $cart->completeCart($repository),
             'carrierPrice' => $carriers->getPrice(),
             'carriers' => $carriers,
-            'delivery' => $delivery
+            'delivery' => $delivery,
+            'reference' => $order->getReference()
         ]);
     }
 }

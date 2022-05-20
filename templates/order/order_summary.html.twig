@@ -50,7 +50,7 @@
                 {% set total = total + (product.product.price * product.quantity) %}
             {% endfor %}
             <form method="POST">
-                <a href="{{path('stripe_create_session')}}" class="btn btn-success btn-block">Payer {{ ((total / 100) + carrierPrice)|number_format(2, ',', '.') }} €</a>
+                <a href="{{path('stripe_create_session', {'reference': reference})}}" class="btn btn-success btn-block">Payer {{ ((total / 100) + carrierPrice)|number_format(2, ',', '.') }} €</a>
             </form>
         </div>
     </div>
